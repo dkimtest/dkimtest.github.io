@@ -1,1 +1,87 @@
-HEllo
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>DKIM Verify</title>
+  <style>
+      #result {
+        font-size: large;
+      }
+      .fail {
+          color: red;
+      }
+      .succ {
+          color: green;
+      }
+  </style>
+  <script type="text/javascript">
+    function doVerify() {
+        var res = document.getElementById('result');
+        res.innerText = "";
+        var form = document.getElementById("verifyForm");
+        var url = form.action;
+        var method = form.method;
+        alert(method + " " + url);
+        var tarea = document.getElementById('eml');
+        var eml = tarea.value;
+        alert(eml);
+
+        var postData = new FormData();
+        postData.append('eml', eml);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.onload = function() {
+            alert( this.responseText );
+            var data = JSON.parse(this.response);
+            //res.innerText = this.responseText;
+            if (data.Res == 1) {
+                res.innerText = 'Verified OK';                  
+                res.className = 'succ';  
+            }
+            else {
+                res.innerText = 'fail';                  
+                res.className = 'fail';  
+            }
+        }
+        xhr.onerror = function() {
+            alert( 'РћС€РёР±РєР° ' + this.status );
+        }
+        xhr.send(postData);
+        return false;
+    }
+  </script>
+ </head>
+ <body>
+  <header>
+   <h1>DKIM Verify</h1>
+  </header>
+  <div>
+    <form id="verifyForm" action="//dkimtest.herokuapp.com/verify" method="POST" onsubmit="doVerify();return false">
+        <h2>Eml data:</h2>
+        <textarea rows="20" cols="80" name="eml" id="eml">
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1506013801;
+    bh=wtjqLvWfiyGYGUOUaM7TNNhqe36CRqParOxBugvSw+A=;
+    h=From:To:Subject:Message-Id:Date;
+    b=m8EudEyZ+WS2iHQBwHOptaAOpHwXet+PcTOPhnSn10c4mJOaIBUGGXY2oaTfhbbtS
+        Wfzh8cj3KizpHTj5tg0LIetXt84XdPD9E0au1VUugp8T8n8ddhgiCj8WpTUZ2oSWQF
+        6YlK/DPsKZZFfEs1SGGjJHM+Hcw713IXVp4hm4XA=
+From: Mail1 Example Com <mail1@example.com>
+To: Mail2 Example Com <mail2@example.com>
+Subject: Dkim Verify subject
+MIME-Version: 1.0
+Message-Id: <123456789000000@web42j.yandex.ru>
+Date: Thu, 30 Feb 2018 00:00:00 +0300
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+
+Hello
+        </textarea>
+        <br>   
+        <input type="submit" value="Verify"> <span id="result">x</span>
+    </form>
+  </div>
+  <footer>
+  </footer>
+ </body>
+</html>
