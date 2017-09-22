@@ -21,10 +21,10 @@
         var form = document.getElementById("verifyForm");
         var url = form.action;
         var method = form.method;
-        alert(method + " " + url);
+        //alert(method + " " + url);
         var tarea = document.getElementById('eml');
         var eml = tarea.value;
-        alert(eml);
+        //alert(eml);
 
         var postData = new FormData();
         postData.append('eml', eml);
@@ -36,11 +36,11 @@
             var data = JSON.parse(this.response);
             //res.innerText = this.responseText;
             if (data.Res == 1) {
-                res.innerText = 'Verified OK';                  
+                res.innerText = 'Verified OK ' + data;                  
                 res.className = 'succ';  
             }
             else {
-                res.innerText = 'fail';                  
+                res.innerText = 'fail ' + data;                  
                 res.className = 'fail';  
             }
         }
