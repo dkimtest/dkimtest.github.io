@@ -36,11 +36,11 @@
             var data = JSON.parse(this.response);
             //res.innerText = this.responseText;
             if (data.Res == 1) {
-                res.innerText = 'Verified OK ' + data;                  
+                res.innerText = 'Verified OK ' + data.stringify();                  
                 res.className = 'succ';  
             }
             else {
-                res.innerText = 'fail ' + data;                  
+                res.innerText = 'fail ' + data.stringify();                  
                 res.className = 'fail';  
             }
         }
