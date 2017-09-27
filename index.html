@@ -15,6 +15,9 @@
       }
   </style>
   <script type="text/javascript">
+   func setcurs(cur) { document.body.style.cursor=cur }
+   func setCurWait() { setcurs("wait") }
+   func setCurDef() { setcurs("default") }
     function doVerify() {
         var res = document.getElementById('result');
         res.innerText = "";
@@ -32,6 +35,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
         xhr.onload = function() {
+         setCurDef();
             alert( this.responseText );
             var data = JSON.parse(this.response);
             //res.innerText = this.responseText;
@@ -45,9 +49,11 @@
             }
         }
         xhr.onerror = function() {
+         setCurDef();
             alert( 'РћС€РёР±РєР° ' + this.status );
         }
         xhr.send(postData);
+     setCurWait();
         return false;
     }
   </script>
