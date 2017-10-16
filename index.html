@@ -39,18 +39,33 @@
             alert( this.responseText );
             var data = JSON.parse(this.response);
             //res.innerText = this.responseText;
-            if (data.Res == 1) {
-                res.innerText = 'Verified OK ' + JSON.stringify(data); 
-                res.className = 'succ';  
+            var clnam = 'succ';
+            var html = '';
+            if (data.Err != '') {
+                clnam = 'fail';
+                html = 'Error: ' + data.Err + '<br>';
             }
-            else {
-                res.innerText = 'fail ' + JSON.stringify(data);       
-                res.className = 'fail';  
+            if (data.Verifications == null || data.Verifications.length == 0) {
+                clnam = 'fail';
+                html += 'no Verifications<br>';                
+            } else {
+                for (var i = 0; i < data.Verifications.length; i++) {
+                    var v = data.Verifications[i];
+                    if (v.Err != null) {
+                        html += '' + v.Identifier + ' ' + v.Err + '<br>';
+                        clnam = 'fail';
+                    }                 
+                    else {
+                        html += '' + v.Identifier + ' Verify Success<br>';
+                    }
+                }
             }
+            res.innerHTML = html; 
+            res.className = clnam;              
         }
         xhr.onerror = function() {
          setCurDef();
-            alert( 'РћС€РёР±РєР° ' + this.status );
+            alert( 'Error ' + this.status );
         }
         xhr.send(postData);
      setCurWait();
