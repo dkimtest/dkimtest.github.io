@@ -4,6 +4,12 @@
   <meta charset="utf-8">
   <title>DKIM Verify</title>
   <style>
+	.loadgif {
+	  background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');   
+	  width: 16px;
+	  height: 16px;
+	}
+	
       #result {
         font-size: large;
       }
@@ -16,9 +22,12 @@
   </style>
   <script type="text/javascript">
    function setcurs(cur) { document.body.style.cursor=cur }
-   function setCurWait() { setcurs("wait") }
-   function setCurDef() { setcurs("default") }
+   function setCurWait() { setcurs("wait"); loadShow(); }
+   function setCurDef() { setcurs("default"); loadHide() }
+   function loadShow() { loadgif.className = 'loadgif' }
+   function loadHide() { loadgif.className = '' }
     function doVerify() {
+    	var loadgif = document.getElementById('loadgif');
         var res = document.getElementById('result');
         res.innerText = "";
         var form = document.getElementById("verifyForm");
@@ -36,7 +45,7 @@
         xhr.open(method, url, true);
         xhr.onload = function() {
          setCurDef();
-            alert( this.responseText );
+            //alert( this.responseText );
             var data = JSON.parse(this.response);
             //res.innerText = this.responseText;
             var clnam = 'succ';
@@ -64,11 +73,13 @@
             res.className = clnam;              
         }
         xhr.onerror = function() {
-         setCurDef();
-            alert( 'Error ' + this.status );
+	    setCurDef();
+            //alert( 'Error ' + this.status );
+            res.innerHTML = this.status; 
+            res.className = 'fail';                          
         }
         xhr.send(postData);
-     setCurWait();
+	setCurWait();
         return false;
     }
   </script>
@@ -93,7 +104,7 @@ Content-Type: text/plain
 Hello
         </textarea>
         <br>   
-        <input type="submit" value="Verify"> <span id="result">x</span>
+        <input type="submit" value="Verify"> <span id="loadgif"> </span><span id="result">x</span> 
     </form>
   </div>
   <footer>
